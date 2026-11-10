@@ -1,4 +1,3 @@
-# todo-app
 # Todo App – TypeScript
 
 אפליקציית משימות פשוטה, בנויה ב-HTML ו-TypeScript בלי פריימוורק, לצורך למידה.
