@@ -1,17 +1,16 @@
 import type { Task } from "./types";
 
-let tasks: Task[] = [];
-
-function saveTasks() {
+function saveTasks(tasks: Task[]) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function loadTasks() {
+function loadTasks(): Task[] {
     const tasksJSON = localStorage.getItem("tasks");
     if (tasksJSON) {
-        tasks = JSON.parse(tasksJSON);
+        return JSON.parse(tasksJSON);
     }
+    return [];
 }
 
-export { tasks, saveTasks, loadTasks };
+export { saveTasks, loadTasks };
 

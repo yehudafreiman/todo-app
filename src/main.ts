@@ -1,12 +1,13 @@
-import type { Task } from "./types";
-import { tasks, saveTasks, loadTasks } from "./storage.js";
+import type { Task } from "./types.js";
+import { saveTasks, loadTasks } from "./storage.js";
 
 const userInput = document.getElementById("user-input") as HTMLInputElement; 
 const addButton = document.getElementById("add-button") as HTMLButtonElement; 
 const taskList = document.getElementById("task-list") as HTMLUListElement; 
 const deleteDoneButton = document.getElementById("delete-done-button") as HTMLButtonElement;
 const deleteAllButton = document.getElementById("delete-all-button") as HTMLButtonElement;
-let tasks: Task[] = []; 
+let tasks: Task[] = loadTasks();
+
 
 userInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
@@ -17,6 +18,17 @@ userInput.addEventListener("keydown", function(event) {
 addButton.addEventListener("click", function() {
     addTask();
 });
+
+deleteDoneButton.addEventListener("click", () => {
+    tasks = tasks.filter((task) => !task.completed);
+    renderTasks();
+});
+
+deleteAllButton.addEventListener("click", () => {
+    tasks = [];
+    renderTasks();
+});
+
 
 function addTask() {
     const taskValue = userInput.value.trim();
@@ -30,6 +42,7 @@ function addTask() {
 }
 
 function renderTasks() {
+  saveTasks(tasks);
   taskList.innerHTML = ""; 
   const completedTasks = tasks.filter((task) => task.completed);
   const noneCompletedTasks = tasks.filter((task) => !task.completed);
@@ -47,28 +60,19 @@ function renderTasks() {
     checkbox.checked = task.completed;
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked;
-        renderTasks();
-        if (task.completed) {
-            li.style.textDecoration = "line-through";
-        } else {
-            li.style.textDecoration = "none";
-        }   
+        renderTasks();  
     });
     li.appendChild(checkbox);
     li.appendChild(document.createTextNode(task.content));
+    li.appendChild(deleteButton);
+    if (task.completed) {
+        li.classList.add("done");
+    } 
     taskList.appendChild(li);
   });
-
-  deleteDoneButton.addEventListener("click", () => {
-    tasks = tasks.filter((task) => !task.completed);
-    renderTasks();
-  });
-
-  deleteAllButton.addEventListener("click", () => {
-    tasks = [];
-    renderTasks();
-  });
 }
+
+renderTasks();
 
 
 
