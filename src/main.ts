@@ -1,4 +1,5 @@
 import type { Task } from "./types";
+import { tasks, saveTasks, loadTasks } from "./storage.js";
 
 const userInput = document.getElementById("user-input") as HTMLInputElement; 
 const addButton = document.getElementById("add-button") as HTMLButtonElement; 
